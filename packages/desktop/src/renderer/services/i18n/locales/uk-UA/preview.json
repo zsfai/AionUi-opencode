@@ -66,10 +66,10 @@
     "emptySnapshot": "Вміст знімка порожній"
   },
   "office": {
-    "installLinkText": "Відкрити інструкцію зі встановлення officecli",
+    "installLinkText": "officecli входить до складу програми. Завантаження не потрібне.",
     "errors": {
-      "officecliNotFound": "officecli не встановлено.",
-      "installFailed": "Не вдалося автоматично встановити officecli. Перевірте логи бекенда й спробуйте ще раз.",
+      "officecliNotFound": "Вбудований officecli для цієї платформи не знайдено.",
+      "installFailed": "Не вдалося запустити вбудований officecli. Перевірте логи бекенда й спробуйте ще раз.",
       "portTimeout": "Сервіс попереднього перегляду запущено, але він не став готовим вчасно. Повторіть спробу.",
       "startFailed": "Не вдалося запустити сервіс попереднього перегляду Office.",
       "outsideSandbox": "Цей файл знаходиться поза межами поточної пісочниці проєкту."
@@ -82,9 +82,9 @@
     "loadFailed": "Не вдалося завантажити документ Word",
     "watch": {
       "loading": "Завантаження документа Word...",
-      "installing": "Встановлення officecli...",
+      "installing": "Запуск локального officecli...",
       "startFailed": "Не вдалося запустити перегляд Word",
-      "installHint": "Потрібен officecli. Його буде встановлено автоматично."
+      "installHint": "Використовується вбудований officecli. Завантаження не потрібне."
     }
   },
   "excel": {
@@ -99,9 +99,9 @@
     "emptySheetHint": "Перевірте, чи містить аркуш дані або зображення",
     "watch": {
       "loading": "Завантаження файлу Excel...",
-      "installing": "Встановлення officecli...",
+      "installing": "Запуск локального officecli...",
       "startFailed": "Не вдалося запустити перегляд Excel",
-      "installHint": "Потрібен officecli. Його буде встановлено автоматично."
+      "installHint": "Використовується вбудований officecli. Завантаження не потрібне."
     }
   },
   "pdf": {
@@ -128,8 +128,8 @@
   },
   "ppt": {
     "loading": "Запуск перегляду PPT...",
-    "installing": "Встановлення компонента перегляду...",
+    "installing": "Запуск локального officecli...",
     "startFailed": "Не вдалося запустити перегляд PPT",
-    "installHint": "Встановіть OfficeCLI зі сторінки офіційних релізів iOfficeAI/OfficeCli"
+    "installHint": "Використовується вбудований officecli. Завантаження не потрібне."
   }
 }

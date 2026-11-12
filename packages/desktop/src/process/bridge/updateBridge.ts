@@ -14,6 +14,7 @@ import type {
   GitHubReleaseAsset,
 } from '@/common/update/updateTypes';
 import { uuid } from '@/common/utils';
+import { isAirgapMode } from '@/common/utils/networkPolicy';
 import { app } from 'electron';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -522,6 +523,9 @@ export function initUpdateBridge(): void {
   ipcBridge.update.check.provider(
     async (params): Promise<{ success: boolean; data?: UpdateCheckResult; msg?: string }> => {
       try {
+        if (isAirgapMode()) {
+          return { success: true, data: { currentVersion: app.getVersion(), updateAvailable: false } };
+        }
         const repo = resolveRepo(params?.repo);
         const includePrerelease = Boolean(params?.includePrerelease);
         const currentVersion = app.getVersion();
@@ -576,6 +580,9 @@ export function initUpdateBridge(): void {
   ipcBridge.update.download.provider(
     async (params: UpdateDownloadRequest): Promise<{ success: boolean; data?: UpdateDownloadResult; msg?: string }> => {
       try {
+        if (isAirgapMode()) {
+          return { success: false, msg: (await getI18n()).t('update.downloadFailed') };
+        }
         if (!params?.url) {
           return { success: false, msg: (await getI18n()).t('update.errors.missingUrl') };
         }

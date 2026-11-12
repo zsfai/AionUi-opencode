@@ -15,6 +15,7 @@ export {
   stopBackend,
 } from './backend-launcher.js';
 export type { BackendDirConfig, BackendLaunchOptions, BackendHandle, BackendStartOptions } from './backend-launcher.js';
+export { applyBundledOfficecliToProcess, findBundledOfficecliDir, withBundledOfficecli } from './officecliPath.js';
 
 /**
  * Start WebHost (main entry point).

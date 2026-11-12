@@ -164,11 +164,9 @@ const MarkdownImage: React.FC<MarkdownImageProps> = ({ src, alt, baseDir, worksp
 const encodeHtmlAttribute = (value: string) => value.replace(/&(?!#?[a-z0-9]+;)/gi, '&amp;');
 
 const rewriteExternalMediaUrls = (markdown: string): string => {
-  const githubWikiRegex = /https:\/\/github\.com\/([^/]+)\/([^/]+)\/wiki\/([^\s)"'>]+)/gi;
-  const rewriteWiki = markdown.replace(githubWikiRegex, (_match, owner, repo, rest) => {
-    return `https://raw.githubusercontent.com/wiki/${owner}/${repo}/${rest}`;
-  });
-  return rewriteWiki.replace(/<(img|a)\b[^>]*>/gi, (tag) => {
+  // Keep remote URLs unchanged. Rewriting GitHub wiki links to raw.githubusercontent.com
+  // forces the renderer to fetch public hosts, which offline mode blocks.
+  return markdown.replace(/<(img|a)\b[^>]*>/gi, (tag) => {
     return tag.replace(/(src|href)\s*=\s*(["'])([^"']*)(\2)/gi, (match, attr, quote, value, closingQuote) => {
       return `${attr}=${quote}${encodeHtmlAttribute(value)}${closingQuote}`;
     });

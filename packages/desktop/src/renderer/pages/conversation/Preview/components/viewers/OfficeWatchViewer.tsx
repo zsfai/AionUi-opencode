@@ -7,7 +7,6 @@
 import { ipcBridge } from '@/common';
 import { getBaseUrl, isBackendHttpError } from '@/common/adapter/httpBridge';
 import WebviewHost from '@/renderer/components/media/WebviewHost';
-import { openExternalUrl } from '@/renderer/utils/platform';
 import { isElectronDesktop } from '@/renderer/utils/platform';
 import { Button, Spin } from '@arco-design/web-react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -68,8 +67,6 @@ const OFFICE_ERROR_I18N_KEYS: Record<OfficeWatchErrorCode, string> = {
   OFFICECLI_START_FAILED: 'preview.office.errors.startFailed',
   PATH_OUTSIDE_SANDBOX: 'preview.office.errors.outsideSandbox',
 };
-
-export const OFFICECLI_INSTALL_URL = 'https://github.com/iOfficeAI/OfficeCli/releases';
 
 interface OfficeWatchViewerProps {
   docType: DocType;
@@ -240,11 +237,7 @@ const OfficeWatchViewer: React.FC<OfficeWatchViewerProps> = ({ docType, file_pat
           <div className='text-16px text-danger mb-8px'>{error.message}</div>
           {!error.code && <div className='text-12px text-t-secondary mb-12px'>{t(keys.installHint)}</div>}
           {showInstallLink && (
-            <div className='flex justify-center'>
-              <Button type='text' size='small' onClick={() => void openExternalUrl(OFFICECLI_INSTALL_URL)}>
-                {t('preview.office.installLinkText')}
-              </Button>
-            </div>
+            <div className='text-12px text-t-secondary mb-12px'>{t('preview.office.installLinkText')}</div>
           )}
           {showRetry && (
             <div className='flex justify-center'>

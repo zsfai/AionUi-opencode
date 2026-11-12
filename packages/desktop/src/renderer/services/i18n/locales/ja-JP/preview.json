@@ -66,10 +66,10 @@
     "emptySnapshot": "スナップショット内容が空です"
   },
   "office": {
-    "installLinkText": "officecli のインストール手順を開く",
+    "installLinkText": "officecli はアプリに同梱されています。ダウンロードは不要です。",
     "errors": {
-      "officecliNotFound": "officecli がインストールされていません。",
-      "installFailed": "officecli の自動インストールに失敗しました。バックエンドログを確認して再試行してください。",
+      "officecliNotFound": "このプラットフォーム用の同梱 officecli が見つかりません。",
+      "installFailed": "同梱の officecli を起動できませんでした。バックエンドログを確認して再試行してください。",
       "portTimeout": "プレビューサービスは起動しましたが、時間内に準備完了になりませんでした。再試行してください。",
       "startFailed": "Office プレビューサービスの起動に失敗しました。",
       "outsideSandbox": "このファイルは現在のプロジェクトサンドボックスの外にあります。"
@@ -82,9 +82,9 @@
     "loadFailed": "Word ドキュメントの読み込みに失敗しました",
     "watch": {
       "loading": "Word ドキュメントを読み込み中...",
-      "installing": "officecli をインストール中...",
+      "installing": "ローカルの officecli を起動しています...",
       "startFailed": "Word プレビューの起動に失敗しました",
-      "installHint": "officecli が必要です。自動的にインストールされます。"
+      "installHint": "同梱の officecli を使います。ダウンロードは不要です。"
     }
   },
   "excel": {
@@ -99,9 +99,9 @@
     "emptySheetHint": "ワークシートにデータまたは画像が含まれているか確認してください",
     "watch": {
       "loading": "Excel ファイルを読み込み中...",
-      "installing": "officecli をインストール中...",
+      "installing": "ローカルの officecli を起動しています...",
       "startFailed": "Excel プレビューの起動に失敗しました",
-      "installHint": "officecli が必要です。自動的にインストールされます。"
+      "installHint": "同梱の officecli を使います。ダウンロードは不要です。"
     }
   },
   "pdf": {
@@ -128,8 +128,8 @@
   },
   "ppt": {
     "loading": "PPTプレビューを起動中...",
-    "installing": "プレビューコンポーネントをインストール中...",
+    "installing": "ローカルの officecli を起動しています...",
     "startFailed": "PPTプレビューの起動に失敗しました",
-    "installHint": "公式 iOfficeAI/OfficeCli releases ページから OfficeCLI をインストールしてください"
+    "installHint": "同梱の officecli を使います。ダウンロードは不要です。"
   }
 }

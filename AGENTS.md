@@ -63,6 +63,16 @@ Two process types — never mix their APIs:
 Cross-process communication must go through the IPC bridge (`packages/desktop/src/preload/`).
 See [docs/architecture/overview.md](docs/architecture/overview.md) for details.
 
+## Offline
+
+The desktop app must keep working with no public network. Air-gap mode is the default. Set `AIONUI_ALLOW_NETWORK=1` only when a task truly needs the public internet.
+
+- Do not add runtime downloads, update checks, telemetry, or CDN fetches. Vendor the bytes instead.
+- `officecli` is pinned in `packages/shared-scripts/src/prepare-officecli.js` and stored at `resources/bundled-officecli/{platform}-{arch}/`. Startup puts that directory first on `PATH` so aioncore does not run the network installer.
+- Main-process `fetch` and the renderer session reject public `http(s)` / `ws(s)` hosts. Loopback and private LAN addresses stay allowed for the local backend and local models.
+- User-configured model endpoints used without internet must be loopback or a private LAN address. Cloud provider URLs are not contacted by the shell while air-gap mode is on.
+- New user-facing copy must not tell people to download tools from GitHub or another public host.
+
 ## Testing
 
 **Framework**: Vitest 4 (`vitest.config.ts`). Coverage target ≥ 80%.

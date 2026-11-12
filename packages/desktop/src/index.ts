@@ -13,7 +13,7 @@ import { captureBackendStartupFailure, initSentry, scheduleStartupLogReport, set
 initSentry();
 
 import './process/utils/configureConsoleLog';
-import { app, BrowserWindow, ipcMain, nativeImage, powerMonitor } from 'electron';
+import { app, BrowserWindow, ipcMain, nativeImage, powerMonitor, session } from 'electron';
 import fixPath from 'fix-path';
 import * as fs from 'fs';
 import * as path from 'path';
@@ -27,14 +27,14 @@ import { installQuitCleanup } from './process/startup/quitCleanup';
 import { ProcessConfig } from './process/utils/initStorage';
 import type { BackendStartupFailureInfo } from './common/types/platform/electron';
 import { registerWindowMaximizeListeners } from '@process/bridge';
-import { BackendLifecycleManager } from '@aionui/web-host';
+import { applyBundledOfficecliToProcess, BackendLifecycleManager, startWebHost } from '@aionui/web-host';
+import { isAirgapMode, isOfflineAllowedUrl } from '@/common/utils/networkPolicy';
 import { resolveBinaryPath } from '@process/backend';
 import './process/bridge/feedbackBridge';
 import { wasLaunchedAtLogin } from '@process/bridge/applicationBridge';
 import { onLanguageChanged } from './process/bridge/systemSettingsBridge';
 import { setInitialLanguage } from '@process/services/i18n';
 import { setupApplicationMenu } from './process/utils/appMenu';
-import { startWebHost } from '@aionui/web-host';
 import { initializeZoomFactor, setupZoomForWindow } from './process/utils/zoom';
 import {
   MIN_WINDOW_WIDTH,
@@ -400,7 +400,10 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   // 初始化自动更新服务（通过环境变量禁用时跳过，例如 E2E / CI 场景）
   const isCiRuntime = process.env.CI === 'true' || process.env.CI === '1' || process.env.GITHUB_ACTIONS === 'true';
   const disableAutoUpdater =
-    process.env.AIONUI_DISABLE_AUTO_UPDATE === '1' || process.env.AIONUI_E2E_TEST === '1' || isCiRuntime;
+    isAirgapMode() ||
+    process.env.AIONUI_DISABLE_AUTO_UPDATE === '1' ||
+    process.env.AIONUI_E2E_TEST === '1' ||
+    isCiRuntime;
   if (!disableAutoUpdater) {
     Promise.all([import('./process/services/autoUpdaterService'), import('./process/bridge/updateBridge')])
       .then(([{ autoUpdaterService }, { createAutoUpdateStatusBroadcast }]) => {
@@ -495,12 +498,34 @@ const createWindow = ({ showOnReady = true }: { showOnReady?: boolean } = {}): v
   });
 };
 
+function installOfflineRequestGuard(): void {
+  const officecliDir = applyBundledOfficecliToProcess();
+  if (officecliDir) {
+    console.info(`[offline] using bundled officecli at ${officecliDir}`);
+  } else {
+    console.warn('[offline] bundled officecli was not found for this platform');
+  }
+  if (!isAirgapMode()) return;
+  session.defaultSession.webRequest.onBeforeRequest(
+    { urls: ['http://*/*', 'https://*/*', 'ws://*/*', 'wss://*/*'] },
+    (details, callback) => {
+      if (isOfflineAllowedUrl(details.url)) {
+        callback({ cancel: false });
+        return;
+      }
+      console.warn(`[offline] blocked ${details.url}`);
+      callback({ cancel: true });
+    }
+  );
+}
+
 const handleAppReady = async (): Promise<void> => {
   const t0 = performance.now();
   const mark = (label: string) => console.log(`[AionUi:ready] ${label} +${Math.round(performance.now() - t0)}ms`);
   mark('start');
+  installOfflineRequestGuard();
 
-  if (!app.isPackaged) {
+  if (!app.isPackaged && !isAirgapMode()) {
     try {
       const { default: installExtension, REACT_DEVELOPER_TOOLS } = await import('electron-devtools-installer');
       await installExtension(REACT_DEVELOPER_TOOLS);

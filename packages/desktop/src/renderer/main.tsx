@@ -7,12 +7,16 @@
 // Sentry must be initialized first
 // Use electron-specific renderer package only inside Electron; fall back to the
 // browser SDK when running as a web server (no window.electronAPI).
-if ((window as { electronAPI?: unknown }).electronAPI) {
-  // Dynamic import avoids bundling sentry-ipc:// protocol code into the web build
+const electronAPI = (window as { electronAPI?: { offline?: boolean } }).electronAPI;
+if (electronAPI) {
+  // Dynamic import avoids bundling sentry-ipc:// protocol code into the web build.
+  // Offline mode still loads the SDK so existing callers stay safe, but it never sends.
   import('@sentry/electron/renderer')
     .then((Sentry) =>
       Sentry.init({
+        enabled: electronAPI.offline !== true,
         beforeSend(event) {
+          if (electronAPI.offline === true) return null;
           if (!(window as { __backendStartupFailed?: boolean }).__backendStartupFailed) {
             return event;
           }

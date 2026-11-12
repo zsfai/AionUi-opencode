@@ -466,6 +466,15 @@ try {
     version: resolveAioncoreVersion(projectRoot),
   });
 
+  execSync('node packages/shared-scripts/src/prepare-officecli.js', {
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      AIONUI_OFFICECLI_PLATFORM: process.platform,
+      AIONUI_OFFICECLI_ARCH: targetArch,
+    },
+  });
+
   // 6. Prepare hub resources (index.json + extension zips for offline fallback)
   execSync('node scripts/prepareHubResources.js', { stdio: 'inherit', env: process.env });
 

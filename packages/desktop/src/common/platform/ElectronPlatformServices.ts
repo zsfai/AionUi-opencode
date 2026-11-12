@@ -1,6 +1,7 @@
 // This is the only file in src/common/platform/ permitted to import from 'electron'.
 import { app, net, Notification, powerSaveBlocker, utilityProcess, type UtilityProcess } from 'electron';
 import path from 'path';
+import { guardFetch } from '@/common/utils/networkPolicy';
 import type { IPlatformServices, IWorkerProcess } from './IPlatformServices';
 
 class ElectronWorkerProcess implements IWorkerProcess {
@@ -67,7 +68,8 @@ export class ElectronPlatformServices implements IPlatformServices {
   };
 
   network = {
-    fetch: (input: string | URL | Request, init?: RequestInit): Promise<Response> =>
-      net.fetch(input instanceof URL ? input.toString() : input, init),
+    fetch: guardFetch((input: string | URL | Request, init?: RequestInit): Promise<Response> =>
+      net.fetch(input instanceof URL ? input.toString() : input, init)
+    ),
   };
 }

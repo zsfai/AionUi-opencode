@@ -66,10 +66,10 @@
     "emptySnapshot": "快照内容为空"
   },
   "office": {
-    "installLinkText": "打开 officecli 安装说明",
+    "installLinkText": "officecli 已随应用内置，无需联网下载。",
     "errors": {
-      "officecliNotFound": "未安装 officecli。",
-      "installFailed": "自动安装 officecli 失败，请检查后端日志后重试。",
+      "officecliNotFound": "未找到当前平台的内置 officecli。",
+      "installFailed": "无法启动内置 officecli，请检查后端日志后重试。",
       "portTimeout": "预览服务启动后未在预期时间内就绪，请重试。",
       "startFailed": "启动 Office 预览服务失败。",
       "outsideSandbox": "该文件不在当前项目沙箱范围内。"
@@ -82,9 +82,9 @@
     "loadFailed": "加载 Word 文档失败",
     "watch": {
       "loading": "正在加载 Word 文档...",
-      "installing": "正在安装 officecli...",
+      "installing": "正在启动本地 officecli...",
       "startFailed": "启动 Word 预览失败",
-      "installHint": "需要 officecli，将自动安装。"
+      "installHint": "使用内置 officecli，无需联网安装。"
     }
   },
   "excel": {
@@ -99,9 +99,9 @@
     "emptySheetHint": "请检查 Excel 文件是否包含数据或图片",
     "watch": {
       "loading": "正在加载 Excel 文件...",
-      "installing": "正在安装 officecli...",
+      "installing": "正在启动本地 officecli...",
       "startFailed": "启动 Excel 预览失败",
-      "installHint": "需要 officecli，将自动安装。"
+      "installHint": "使用内置 officecli，无需联网安装。"
     }
   },
   "pdf": {
@@ -128,8 +128,8 @@
   },
   "ppt": {
     "loading": "正在启动 PPT 预览...",
-    "installing": "正在安装预览组件...",
+    "installing": "正在启动本地 officecli...",
     "startFailed": "启动 PPT 预览失败",
-    "installHint": "请从官方 iOfficeAI/OfficeCli releases 页面安装 OfficeCLI"
+    "installHint": "使用内置 officecli，无需联网安装。"
   }
 }

@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { execSync } = require('child_process');
+const { execFileSync, execSync } = require('child_process');
 const { prepareAioncore } = require('../packages/shared-scripts/src/prepare-aioncore.js');
 const { resolveAioncoreVersion } = require('./resolveAioncoreVersion.js');
 
@@ -30,6 +30,14 @@ prepareAioncore({
   platform,
   arch,
   version: resolveAioncoreVersion(projectRoot),
+});
+execFileSync(process.execPath, [path.join(projectRoot, 'packages/shared-scripts/src/prepare-officecli.js')], {
+  stdio: 'inherit',
+  env: {
+    ...process.env,
+    AIONUI_OFFICECLI_PLATFORM: platform,
+    AIONUI_OFFICECLI_ARCH: arch,
+  },
 });
 
 // 2. Create staging dir
@@ -85,6 +93,14 @@ if (!fs.existsSync(backendSrc)) {
 }
 fs.mkdirSync(path.dirname(backendDest), { recursive: true });
 fs.cpSync(backendSrc, backendDest, { recursive: true });
+
+const officecliSrc = path.join(projectRoot, 'resources/bundled-officecli', `${platform}-${arch}`);
+const officecliDest = path.join(tarballContentDir, 'bundled-officecli', `${platform}-${arch}`);
+if (!fs.existsSync(officecliSrc)) {
+  throw new Error(`officecli bundle dir missing at ${officecliSrc}. Ensure prepareOfficecli succeeded.`);
+}
+fs.mkdirSync(path.dirname(officecliDest), { recursive: true });
+fs.cpSync(officecliSrc, officecliDest, { recursive: true });
 
 // 8. Create tarball
 fs.mkdirSync(distDir, { recursive: true });

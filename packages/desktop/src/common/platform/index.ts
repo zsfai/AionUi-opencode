@@ -1,4 +1,5 @@
 import path from 'path';
+import { guardFetch } from '@/common/utils/networkPolicy';
 import type { IPlatformServices } from './IPlatformServices';
 import { NodePlatformServices } from './NodePlatformServices';
 
@@ -74,8 +75,9 @@ export function getPlatformServices(): IPlatformServices {
           power: { preventSleep: () => null, allowSleep: () => {}, preventDisplaySleep: () => null },
           notification: { send: () => {} },
           network: {
-            fetch: (input: string | URL | Request, init?: RequestInit): Promise<Response> =>
-              net.fetch(input instanceof URL ? input.toString() : input, init),
+            fetch: guardFetch((input: string | URL | Request, init?: RequestInit): Promise<Response> =>
+              net.fetch(input instanceof URL ? input.toString() : input, init)
+            ),
           },
         };
       }

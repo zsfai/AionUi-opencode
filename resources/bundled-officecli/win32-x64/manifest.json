@@ -1,0 +1,7 @@
+{
+  "version": "1.0.161",
+  "asset": "officecli-win-x64.exe",
+  "binary": "officecli.exe",
+  "sha256": "7d0872af30e0b2aa827f4e2eb0761b8852044a1385c8579f9717db8a8b91c357",
+  "source": "https://d.officecli.ai/releases/download/v1.0.161/officecli-win-x64.exe"
+}

@@ -66,10 +66,10 @@
     "emptySnapshot": "Snapshot content is empty"
   },
   "office": {
-    "installLinkText": "Open officecli install guide",
+    "installLinkText": "officecli is bundled with the app. No download is required.",
     "errors": {
-      "officecliNotFound": "officecli is not installed.",
-      "installFailed": "Failed to install officecli automatically. Check backend logs and retry.",
+      "officecliNotFound": "Bundled officecli was not found for this platform.",
+      "installFailed": "Could not start the bundled officecli. Check backend logs and retry.",
       "portTimeout": "Preview service started but did not become ready in time. Retry.",
       "startFailed": "Failed to start the Office preview service.",
       "outsideSandbox": "This file is outside the current project sandbox."
@@ -82,9 +82,9 @@
     "loadFailed": "Failed to load Word document",
     "watch": {
       "loading": "Loading Word document...",
-      "installing": "Installing officecli...",
+      "installing": "Starting local officecli...",
       "startFailed": "Failed to start Word preview",
-      "installHint": "Requires officecli. It will be installed automatically."
+      "installHint": "Uses the bundled officecli. No download is required."
     }
   },
   "excel": {
@@ -99,9 +99,9 @@
     "emptySheetHint": "Check whether the sheet contains data or images",
     "watch": {
       "loading": "Loading Excel file...",
-      "installing": "Installing officecli...",
+      "installing": "Starting local officecli...",
       "startFailed": "Failed to start Excel preview",
-      "installHint": "Requires officecli. It will be installed automatically."
+      "installHint": "Uses the bundled officecli. No download is required."
     }
   },
   "pdf": {
@@ -128,8 +128,8 @@
   },
   "ppt": {
     "loading": "Starting PPT preview...",
-    "installing": "Installing preview component...",
+    "installing": "Starting local officecli...",
     "startFailed": "Failed to start PPT preview",
-    "installHint": "Install OfficeCLI from the official iOfficeAI/OfficeCli releases page"
+    "installHint": "Uses the bundled officecli. No download is required."
   }
 }

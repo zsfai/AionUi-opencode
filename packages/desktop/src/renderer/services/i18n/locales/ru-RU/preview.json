@@ -66,10 +66,10 @@
     "emptySnapshot": "Содержимое снимка пусто"
   },
   "office": {
-    "installLinkText": "Открыть инструкцию по установке officecli",
+    "installLinkText": "officecli входит в состав приложения. Скачивание не требуется.",
     "errors": {
-      "officecliNotFound": "officecli не установлен.",
-      "installFailed": "Не удалось автоматически установить officecli. Проверьте логи бэкенда и повторите попытку.",
+      "officecliNotFound": "Встроенный officecli для этой платформы не найден.",
+      "installFailed": "Не удалось запустить встроенный officecli. Проверьте логи бэкенда и повторите попытку.",
       "portTimeout": "Сервис предпросмотра запустился, но не стал готов вовремя. Повторите попытку.",
       "startFailed": "Не удалось запустить сервис предпросмотра Office.",
       "outsideSandbox": "Этот файл находится вне текущей песочницы проекта."
@@ -82,9 +82,9 @@
     "loadFailed": "Не удалось загрузить документ Word",
     "watch": {
       "loading": "Загрузка документа Word...",
-      "installing": "Установка officecli...",
+      "installing": "Запуск локального officecli...",
       "startFailed": "Не удалось запустить предпросмотр Word",
-      "installHint": "Требуется officecli. Будет установлен автоматически."
+      "installHint": "Используется встроенный officecli. Скачивание не требуется."
     }
   },
   "excel": {
@@ -99,9 +99,9 @@
     "emptySheetHint": "Проверьте, содержит ли лист данные или изображения",
     "watch": {
       "loading": "Загрузка файла Excel...",
-      "installing": "Установка officecli...",
+      "installing": "Запуск локального officecli...",
       "startFailed": "Не удалось запустить предпросмотр Excel",
-      "installHint": "Требуется officecli. Будет установлен автоматически."
+      "installHint": "Используется встроенный officecli. Скачивание не требуется."
     }
   },
   "pdf": {
@@ -128,8 +128,8 @@
   },
   "ppt": {
     "loading": "Запуск предпросмотра PPT...",
-    "installing": "Установка компонента предпросмотра...",
+    "installing": "Запуск локального officecli...",
     "startFailed": "Не удалось запустить предпросмотр PPT",
-    "installHint": "Установите OfficeCLI со страницы официальных выпусков iOfficeAI/OfficeCli"
+    "installHint": "Используется встроенный officecli. Скачивание не требуется."
   }
 }

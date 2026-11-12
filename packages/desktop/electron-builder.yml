@@ -112,6 +112,8 @@ extraResources:
   # aioncore binary (pre-compiled per platform/arch, ships its own bun runtime)
   - from: resources/bundled-aioncore
     to: bundled-aioncore
+  - from: resources/bundled-officecli
+    to: bundled-officecli
   - from: resources/hub
     to: hub
 win:

@@ -9,6 +9,7 @@ import { app, type BrowserWindow } from 'electron';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { gzipSync } from 'node:zlib';
+import { isAirgapMode } from './common/utils/networkPolicy';
 import { getOrCreateAnalyticsId } from './process/utils/analyticsId';
 import { readAutoUpdateDiagnostics } from './process/services/autoUpdateDiagnostics';
 import { collectBackendInstallDiagnostics } from './process/startup/backendInstallDiagnostics';
@@ -96,8 +97,13 @@ function isBackendStartupSecondaryEvent(event: { tags?: Record<string, unknown> 
 }
 
 export function initSentry(): void {
+  const airgap = isAirgapMode();
+  if (airgap) {
+    console.info('[sentry] disabled in offline mode');
+  }
   Sentry.init({
-    dsn: process.env.SENTRY_DSN,
+    dsn: airgap ? undefined : process.env.SENTRY_DSN,
+    enabled: !airgap,
     environment: app.isPackaged ? 'production' : 'development',
     beforeSend(event) {
       const haystacks = collectEventSearchText(event);
@@ -503,6 +509,10 @@ async function runStartupLogReport(): Promise<void> {
  * retries.
  */
 export function scheduleStartupLogReport(window: BrowserWindow): void {
+  if (isAirgapMode()) {
+    console.info('[sentry] startup log report skipped (offline mode)');
+    return;
+  }
   const trigger = () => {
     setTimeout(() => {
       runStartupLogReport().catch((err) => {

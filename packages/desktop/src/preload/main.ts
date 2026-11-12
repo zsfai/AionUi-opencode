@@ -11,11 +11,13 @@
 import '@sentry/electron/preload';
 import { contextBridge, ipcRenderer, webUtils } from 'electron';
 import { ADAPTER_BRIDGE_EVENT_KEY } from '../common/adapter/constant';
+import { isAirgapMode } from '../common/utils/networkPolicy';
 
 /**
  * @description 注入到renderer进程中, 用于与main进程通信
  * */
 contextBridge.exposeInMainWorld('electronAPI', {
+  offline: isAirgapMode(),
   emit: (name: string, data: any) => {
     return ipcRenderer
       .invoke(

@@ -17,6 +17,8 @@
  * is recorded in N4c-final.md Deviations.
  */
 
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, it, expect } from 'vitest';
 
 describe('OfficeWatchViewer module shape', () => {
@@ -39,8 +41,13 @@ describe('OfficeWatchViewer module shape', () => {
     expect((mod.default as { length: number }).length).toBeLessThanOrEqual(2);
   });
 
-  it('uses official iOfficeAI OfficeCLI releases page', async () => {
-    const mod = await import('@/renderer/pages/conversation/Preview/components/viewers/OfficeWatchViewer');
-    expect(mod.OFFICECLI_INSTALL_URL).toBe('https://github.com/iOfficeAI/OfficeCli/releases');
+  it('does not send the user to a public officecli download page', () => {
+    const sourcePath = resolve(
+      __dirname,
+      '../../../packages/desktop/src/renderer/pages/conversation/Preview/components/viewers/OfficeWatchViewer.tsx'
+    );
+    const source = readFileSync(sourcePath, 'utf8');
+    expect(source).not.toContain('github.com/iOfficeAI/OfficeCli');
+    expect(source).not.toContain('openExternalUrl');
   });
 });

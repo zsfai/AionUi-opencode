@@ -2,6 +2,7 @@ import { fork as cpFork, type ChildProcess } from 'child_process';
 import { readFileSync } from 'fs';
 import os from 'os';
 import path from 'path';
+import { guardFetch } from '@/common/utils/networkPolicy';
 import type { IPlatformServices, IWorkerProcess } from './IPlatformServices';
 
 class NodeWorkerProcess implements IWorkerProcess {
@@ -72,6 +73,6 @@ export class NodePlatformServices implements IPlatformServices {
   };
 
   network = {
-    fetch: (input: string | URL | Request, init?: RequestInit): Promise<Response> => fetch(input, init),
+    fetch: guardFetch((input: string | URL | Request, init?: RequestInit): Promise<Response> => fetch(input, init)),
   };
 }

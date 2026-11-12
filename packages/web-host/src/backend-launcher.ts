@@ -11,6 +11,7 @@
 import { type ChildProcess, spawn } from 'node:child_process';
 import { connect, createServer, type Socket } from 'node:net';
 import { cleanupRegisteredAgentProcesses } from './agent-process-registry.js';
+import { withBundledOfficecli } from './officecliPath.js';
 import type { AppMetadata, BackendBinaryResolver } from './types.js';
 
 type BackendStatus = 'stopped' | 'starting' | 'running' | 'error';
@@ -206,12 +207,12 @@ export function buildSpawnArgs(config: SpawnConfig): string[] {
  * ProcessEnv('aionui.dir').
  */
 export function buildSpawnEnv(dirs: BackendDirConfig): NodeJS.ProcessEnv {
-  return {
+  return withBundledOfficecli({
     ...process.env,
     AIONUI_CACHE_DIR: dirs.cacheDir,
     AIONUI_WORK_DIR: dirs.workDir,
     AIONUI_LOG_DIR: dirs.logDir,
-  };
+  });
 }
 
 const FETCH_FORBIDDEN_PORTS = new Set([
@@ -549,7 +550,7 @@ export class BackendLifecycleManager {
     try {
       this.childProcess = spawn(binaryPath, args, {
         stdio: ['pipe', 'pipe', 'pipe'],
-        env: dirs ? buildSpawnEnv(dirs) : process.env,
+        env: dirs ? buildSpawnEnv(dirs) : withBundledOfficecli(process.env),
         detached: process.platform !== 'win32',
       });
     } catch (error) {

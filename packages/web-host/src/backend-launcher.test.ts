@@ -6,6 +6,7 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { EventEmitter } from 'node:events';
+import { delimiter, join } from 'node:path';
 import type { ChildProcess } from 'node:child_process';
 import type { Socket } from 'node:net';
 
@@ -27,6 +28,7 @@ import { spawn } from 'node:child_process';
 import { connect, createServer } from 'node:net';
 import { cleanupRegisteredAgentProcesses } from './agent-process-registry.js';
 import { buildSpawnArgs, buildSpawnEnv, findAvailablePort, BackendLifecycleManager } from './backend-launcher.js';
+import { findBundledOfficecliDir, officecliBinaryName, withBundledOfficecli } from './officecliPath.js';
 import type { AppMetadata } from './types.js';
 
 const APP_META: AppMetadata = {
@@ -168,6 +170,55 @@ describe('buildSpawnArgs', () => {
   });
 });
 
+describe('bundled officecli', () => {
+  it('returns null when no vendored binary exists', () => {
+    const found = findBundledOfficecliDir({
+      cwd: '/missing',
+      resourcesPath: '/missing-resources',
+      execPath: '/missing/app.exe',
+      env: {},
+      exists: () => false,
+    });
+    expect(found).toBeNull();
+  });
+
+  it('puts the vendored directory at the front of PATH', () => {
+    const dir = join('/resources', 'bundled-officecli', 'linux-x64');
+    const binary = join(dir, officecliBinaryName('linux'));
+    const env = withBundledOfficecli(
+      { PATH: '/usr/bin', AIONUI_ALLOW_NETWORK: '1' },
+      {
+        cwd: '/work',
+        resourcesPath: '/resources',
+        execPath: '/work/app',
+        platform: 'linux',
+        arch: 'x64',
+        exists: (filePath) => filePath === binary,
+      }
+    );
+    expect(env.AIONUI_OFFICECLI_DIR).toBe(dir);
+    expect(env.PATH?.startsWith(dir)).toBe(true);
+    expect(env.AIONUI_OFFLINE).toBeUndefined();
+  });
+
+  it('does not mark the process offline when public network is explicitly allowed', () => {
+    const env = withBundledOfficecli(
+      { AIONUI_ALLOW_NETWORK: '1' },
+      { cwd: '/missing', resourcesPath: '/missing', execPath: '/missing/app', exists: () => false }
+    );
+    expect(env.AIONUI_OFFLINE).toBeUndefined();
+  });
+
+  it('sets AIONUI_OFFLINE when public network is not allowed', () => {
+    const env = withBundledOfficecli(
+      {},
+      { cwd: '/missing', resourcesPath: '/missing', execPath: '/missing/app', exists: () => false }
+    );
+    expect(env.AIONUI_OFFLINE).toBe('1');
+    expect(env.AIONUI_OFFICECLI_DIR).toBeUndefined();
+  });
+});
+
 describe('buildSpawnEnv', () => {
   it('merges process.env with AIONUI_* dir vars', () => {
     const env = buildSpawnEnv({
@@ -178,7 +229,9 @@ describe('buildSpawnEnv', () => {
     expect(env.AIONUI_CACHE_DIR).toBe('/c');
     expect(env.AIONUI_WORK_DIR).toBe('/w');
     expect(env.AIONUI_LOG_DIR).toBe('/l');
-    expect(env.PATH).toBe(process.env.PATH); // inherits
+    const inheritedPath = process.env.PATH || '';
+    const pathValue = env.PATH || '';
+    expect(pathValue === inheritedPath || pathValue.endsWith(`${delimiter}${inheritedPath}`)).toBe(true);
   });
 });
 

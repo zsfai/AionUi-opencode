@@ -16,6 +16,7 @@
 
 const path = require('path');
 const { prepareAioncore } = require('../packages/shared-scripts/src/prepare-aioncore.js');
+const { prepareOfficecli } = require('../packages/shared-scripts/src/prepare-officecli.js');
 const { resolveAioncoreVersion } = require('./resolveAioncoreVersion.js');
 
 const projectRoot = path.resolve(__dirname, '..');
@@ -31,11 +32,17 @@ try {
   process.exit(1);
 }
 
+prepareOfficecli({ projectRoot, platform, arch }).catch((error) => {
+  console.error('❌ prepareOfficecli failed:', error.message);
+  process.exit(1);
+});
+
 module.exports = function () {
   try {
-    return prepareAioncore({ projectRoot, platform, arch, version });
+    prepareAioncore({ projectRoot, platform, arch, version });
   } catch (error) {
     console.error('❌ prepareAioncore failed:', error.message);
     throw error;
   }
+  return prepareOfficecli({ projectRoot, platform, arch });
 };

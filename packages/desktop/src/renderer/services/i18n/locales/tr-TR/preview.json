@@ -66,10 +66,10 @@
     "emptySnapshot": "Anlık görüntü içeriği boş"
   },
   "office": {
-    "installLinkText": "officecli kurulum kılavuzunu aç",
+    "installLinkText": "officecli uygulamayla birlikte gelir. İndirme gerekmez.",
     "errors": {
-      "officecliNotFound": "officecli yüklü değil.",
-      "installFailed": "officecli otomatik olarak yüklenemedi. Arka uç günlüklerini kontrol edip yeniden deneyin.",
+      "officecliNotFound": "Bu platform için paketlenmiş officecli bulunamadı.",
+      "installFailed": "Paketlenmiş officecli başlatılamadı. Arka uç günlüklerini kontrol edip yeniden deneyin.",
       "portTimeout": "Önizleme servisi başladı ancak zamanında hazır olmadı. Yeniden deneyin.",
       "startFailed": "Office önizleme servisi başlatılamadı.",
       "outsideSandbox": "Bu dosya geçerli çalışma alanı sandbox'ının dışında."
@@ -82,9 +82,9 @@
     "loadFailed": "Word belgesi yüklenemedi",
     "watch": {
       "loading": "Word belgesi yükleniyor...",
-      "installing": "officecli yükleniyor...",
+      "installing": "Yerel officecli başlatılıyor...",
       "startFailed": "Word önizlemesi başlatılamadı",
-      "installHint": "officecli gereklidir. Otomatik olarak yüklenecektir."
+      "installHint": "Paketlenmiş officecli kullanılır. İndirme gerekmez."
     }
   },
   "excel": {
@@ -99,9 +99,9 @@
     "emptySheetHint": "Sayfanın veri veya resim içerip içermediğini kontrol edin",
     "watch": {
       "loading": "Excel dosyası yükleniyor...",
-      "installing": "officecli yükleniyor...",
+      "installing": "Yerel officecli başlatılıyor...",
       "startFailed": "Excel önizlemesi başlatılamadı",
-      "installHint": "officecli gereklidir. Otomatik olarak yüklenecektir."
+      "installHint": "Paketlenmiş officecli kullanılır. İndirme gerekmez."
     }
   },
   "pdf": {
@@ -128,8 +128,8 @@
   },
   "ppt": {
     "loading": "PPT önizlemesi başlatılıyor...",
-    "installing": "Önizleme bileşeni yükleniyor...",
+    "installing": "Yerel officecli başlatılıyor...",
     "startFailed": "PPT önizlemesi başlatılamadı",
-    "installHint": "OfficeCLI'yi resmi iOfficeAI/OfficeCli releases sayfasından yükleyin"
+    "installHint": "Paketlenmiş officecli kullanılır. İndirme gerekmez."
   }
 }
