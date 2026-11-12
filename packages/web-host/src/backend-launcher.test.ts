@@ -139,6 +139,19 @@ describe('buildSpawnArgs', () => {
     expect(args).not.toContain('--local');
   });
 
+  it('passes bundled managed resources mode while offline even when unpackaged', () => {
+    const args = buildSpawnArgs({
+      port: 1,
+      dbPath: '/d',
+      local: false,
+      appVersion: '0.0.1',
+      isPackaged: false,
+      offline: true,
+    });
+    expect(args).toContain('--managed-resources-mode');
+    expect(args).toContain('bundled');
+  });
+
   it('passes bundled managed resources mode when packaged', () => {
     const args = buildSpawnArgs({
       port: 1,

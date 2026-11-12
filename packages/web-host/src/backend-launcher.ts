@@ -70,6 +70,8 @@ type SpawnConfig = {
   workDir?: string;
   appVersion: string;
   isPackaged: boolean;
+  /** Use only the vendored managed resources and do not download them. */
+  offline?: boolean;
 };
 
 export type BackendDirConfig = {
@@ -193,7 +195,7 @@ export function buildSpawnArgs(config: SpawnConfig): string[] {
     '--app-version',
     config.appVersion,
   ];
-  if (config.isPackaged) args.push('--managed-resources-mode', 'bundled');
+  if (config.isPackaged || config.offline) args.push('--managed-resources-mode', 'bundled');
   if (config.logDir) args.push('--log-dir', config.logDir);
   if (config.workDir) args.push('--work-dir', config.workDir);
   if (config.local) args.push('--local');
@@ -535,6 +537,8 @@ export class BackendLifecycleManager {
       );
     };
 
+    const allowNetwork = process.env.AIONUI_ALLOW_NETWORK?.trim().toLowerCase();
+    const offline = !allowNetwork || !['1', 'true', 'yes'].includes(allowNetwork);
     const args = buildSpawnArgs({
       port: this._port,
       dbPath,
@@ -544,6 +548,7 @@ export class BackendLifecycleManager {
       workDir: dirs?.workDir,
       appVersion,
       isPackaged: this.appMeta.isPackaged,
+      offline,
     });
     console.log(`[aioncore] starting: ${binaryPath} ${args.join(' ')}`);
 
